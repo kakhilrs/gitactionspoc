@@ -42,6 +42,7 @@
 						<workerType>Micro</workerType>
 						<workers>1</workers>
 						<region>us-east-2</region>
+						<objectStoreV2>true</objectStoreV2>
 					</cloudHubDeployment>
 				</configuration>
 			</plugin>
