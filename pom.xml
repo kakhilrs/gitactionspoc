@@ -38,7 +38,7 @@
 						<username>kakhilRS</username>
 						<password>Apisero@123</password>
 						<applicationName>${name}</applicationName>
-						<environment>Sandbox</environment>
+						<environment>${environment}</environment>
 						<workerType>Micro</workerType>
 						<workers>1</workers>
 						<region>us-east-2</region>
