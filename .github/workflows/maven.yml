@@ -9,11 +9,7 @@ on:
       - master
       - develop
       - release
-  pull_request:
-    branches: 
-      - master
-      - develop
-      - release
+  
 jobs:
   build:
 
@@ -46,7 +42,19 @@ jobs:
     - uses: actions/download-artifact@master
       with: 
         name: artifacts
-    - name: Deploy to cloudhub
+    - name: Deploy to Design
+      if: github.ref == 'refs/heads/develop'
       run:  |
         artifactName=$(ls *.jar | head -1)
-        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName="kakhilRS" -Danypoint.password="Apisero@123"
+        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName="kakhilRS" -Danypoint.password="Apisero@123" -Denvironment="Design"
+    - name: Deploy to Sandbox  
+      if: github.ref == 'refs/heads/release'
+      run:  |
+        artifactName=$(ls *.jar | head -1)
+        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName="kakhilRS" -Danypoint.password="Apisero@123" -Denvironment="Sandbox"
+    - name: Deploy to Sandbox  
+      if: github.ref == 'refs/heads/master'
+      run:  |
+        artifactName=$(ls *.jar | head -1)
+        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName="kakhilRS" -Danypoint.password="Apisero@123" -Denvironment="Sandbox"
+      
