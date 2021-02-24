@@ -32,20 +32,21 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    environment: uat
+    environment: ${{ steps.Deploy-to-Cloudhub.env.environment }}
     steps:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@master
       with: 
         name: artifacts
-    - name: Deploy to Dev
-      if: github.ref == 'refs/heads/develop'
+      name: Deploy-to-Cloudhub
+    #- id: "1234"
+    - if: github.ref == 'refs/heads/develop'
       run: echo "environment=dev" >> $GITHUB_ENV
-    - name: Deploy to release
-      if: github.ref == 'refs/heads/release'
+    #- name: Deploy to release
+    - if: github.ref == 'refs/heads/release'
       run: echo "environment=uat" >> $GITHUB_ENV
-    - name: Deploy to Prod
-      if: github.ref == 'refs/heads/master'
+    #- name: Deploy to Prod
+    - if: github.ref == 'refs/heads/master'
       run: echo "environment=prod" >> $GITHUB_ENV
     - run:  |
         artifactName=$(ls *.jar | head -1)
