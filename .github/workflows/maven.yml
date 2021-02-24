@@ -45,5 +45,6 @@ jobs:
     - name: Deploy to Design
       run:  |
         artifactName=$(ls *.jar | head -1)
+        echo ${{ secrets.ANYPOINT_ENV }}
         mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName=${{ secrets.ANYPOINT_USER }} -Danypoint.password=${{ secrets.ANYPOINT_PASS }} -Denvironment=${{ secrets.ANYPOINT_ENV }}
    
