@@ -4,12 +4,10 @@ name: Mule Github Actions POC
 on:
   push:
     branches:
-      - main
+      - master
+      - release
       - develop
-  pull_request:
-    branches: 
-      - main
-      - develop
+      
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -43,11 +41,11 @@ jobs:
       if: github.ref == 'refs/heads/develop'
       run: echo "environment=dev" >> $GITHUB_ENV
     - name: Deploy to release
-      if: github.ref == 'refs/heads/develop'
+      if: github.ref == 'refs/heads/release'
       run: echo "environment=uat" >> $GITHUB_ENV
     - name: Deploy to Prod
       if: github.ref == 'refs/heads/master'
       run: echo "environment=prod" >> $GITHUB_ENV
     - run:  |
         artifactName=$(ls *.jar | head -1)
-        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName="${{ secrets.username }}" -Danypoint.password="${{ secrets.password }}" -Dcloudhub.app="mule-git-actions-POC-${{ env.environment }}" -Denvironment="Sandbox"
+        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName="${{ secrets.ANYPOINT_USER }}" -Danypoint.password="${{ secrets.ANYPOINT_PASS }}" -Dcloudhub.app="mule-git-actions-POC-${{ env.environment }}" -Denvironment="Sandbox"
