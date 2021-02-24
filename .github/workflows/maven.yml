@@ -32,22 +32,23 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    environment: ${{ steps.Deploy-to-Cloudhub.env.environment }}
+    environment: ${{ steps.deploy.outputs.env }}
     steps:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@master
       with: 
         name: artifacts
-      name: Deploy-to-Cloudhub
+      #name: Deploy-to-Cloudhub
+      id: deploy
     #- id: "1234"
     - if: github.ref == 'refs/heads/develop'
-      run: echo "environment=dev" >> $GITHUB_ENV
+      run: echo "environment=dev" >> $GITHUB_ENV | echo "::set-output name=env::dev"
     #- name: Deploy to release
     - if: github.ref == 'refs/heads/release'
-      run: echo "environment=uat" >> $GITHUB_ENV
+      run: echo "environment=uat" >> $GITHUB_ENV | echo "::set-output name=env::uat"
     #- name: Deploy to Prod
     - if: github.ref == 'refs/heads/master'
-      run: echo "environment=prod" >> $GITHUB_ENV
+      run: echo "environment=prod" >> $GITHUB_ENV | echo "::set-output name=env::prod"
     - run:  |
         artifactName=$(ls *.jar | head -1)
         mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName="${{ secrets.username }}" -Danypoint.password="${{ secrets.password }}" -Dcloudhub.app="mule-git-actions-POC-${{ env.environment }}" -Dcloudhub.environment="Sandbox"
