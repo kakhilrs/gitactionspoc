@@ -43,18 +43,7 @@ jobs:
       with: 
         name: artifacts
     - name: Deploy to Design
-      if: github.ref == 'refs/heads/develop'
       run:  |
         artifactName=$(ls *.jar | head -1)
-        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName="kakhilRS" -Danypoint.password="Apisero@123" -Denvironment="development"
-    - name: Deploy to Sandbox  
-      if: github.ref == 'refs/heads/release'
-      run:  |
-        artifactName=$(ls *.jar | head -1)
-        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName="kakhilRS" -Danypoint.password="Apisero@123" -Denvironment="Sandbox"
-    - name: Deploy to Sandbox  
-      if: github.ref == 'refs/heads/master'
-      run:  |
-        artifactName=$(ls *.jar | head -1)
-        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName="kakhilRS" -Danypoint.password="Apisero@123" -Denvironment="Sandbox"
-      
+        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName=${{ secrets.ANYPOINT_USER }} -Danypoint.password=${{ secrets.ANYPOINT_PASS }} -Denvironment=${{ secrets.ANYPOINT_ENV }}
+   
