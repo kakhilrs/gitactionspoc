@@ -48,4 +48,4 @@ jobs:
       run: echo "environment=prod" >> $GITHUB_ENV
     - run:  |
         artifactName=$(ls *.jar | head -1)
-        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName="${{ secrets.ANYPOINT_USER }}" -Danypoint.password="${{ secrets.ANYPOINT_PASS }}" -Dcloudhub.app="mule-git-actions-POC-${{ env.environment }}" -Denvironment="Sandbox"
+        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName="${{ secrets.username }}" -Danypoint.password="${{ secrets.password }}" -Dcloudhub.app="mule-git-actions-POC-${{ env.environment }}" -Dcloudhub.environment="Sandbox"
