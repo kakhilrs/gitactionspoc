@@ -9,12 +9,13 @@ on:
       - master
       - develop
       - release
+      
   
 jobs:
+  
   build:
 
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 1.8
@@ -38,15 +39,22 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     
-    environment: ${{ if [[github.ref == 'refs/heads/develop']] then dev elif [[github.ref == 'refs/heads/release']] then uat elif [[github.ref == 'refs/heads/master']] then prd fi}}
     
     steps:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@master
       with: 
         name: artifacts
-    - name: Assign dev environment variables
+    - name: Deploy to Dev
       if: github.ref == 'refs/heads/develop'
+      run: echo "environment=dev" >> $GITHUB_ENV
+    - name: Deploy to release
+      if: github.ref == 'refs/heads/release'
+      run: echo "environment=uat" >> $GITHUB_ENV
+    - name: Deploy to Prod
+      if: github.ref == 'refs/heads/master'
+      run: echo "environment=prod" >> $GITHUB_ENV
+    - name: Assign environment variables
       env:
         USERNAME: ${{ secrets.ANYPOINT_USER }}
         PASSWORD: ${{ secrets.ANYPOINT_PASS }}
@@ -54,5 +62,5 @@ jobs:
       run:  |
         artifactName=$(ls *.jar | head -1)
         echo $ENVIRONMENT
-        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName=$USERNAME -Danypoint.password=$PASSWORD -Denvironment=$ENVIRONMENT
+        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName=$USERNAME -Danypoint.password=$PASSWORD -Denvironment="Sandbox"
    
