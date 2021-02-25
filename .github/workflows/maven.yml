@@ -37,12 +37,16 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    
+    environment: ${{ if [[github.ref == 'refs/heads/develop']] then dev elif [[github.ref == 'refs/heads/release']] then uat elif [[github.ref == 'refs/heads/master']] then prd fi}}
+    
     steps:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@master
       with: 
         name: artifacts
-    - name: Deploy to Design
+    - name: Assign dev environment variables
+      if: github.ref == 'refs/heads/develop'
       env:
         USERNAME: ${{ secrets.ANYPOINT_USER }}
         PASSWORD: ${{ secrets.ANYPOINT_PASS }}
