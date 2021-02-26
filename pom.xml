@@ -37,7 +37,7 @@
 						<muleVersion>${app.runtime}</muleVersion>
 						<username>${anypoint.userName}</username>
 						<password>${anypoint.password}</password>
-						<applicationName>${name}</applicationName>
+						<applicationName>${project.name}</applicationName>
 						<environment>${environment}</environment>
 						<workerType>Micro</workerType>
 						<workers>1</workers>
