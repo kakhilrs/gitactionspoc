@@ -70,5 +70,5 @@ jobs:
       run:  |
         artifactName=$(ls *.jar | head -1)
         echo $ENVIRONMENT
-        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName="kakhilmar" -Danypoint.password="Apisero@123" -Denvironment="Sandbox" -Dapp.cloudhub="agithubactions-poc-${{env.environment}}"
+        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName="kakhilmar" -Danypoint.password="Apisero@123" -Denvironment=$ANYPOINT_ENV -Dapp.cloudhub="agithubactions-poc-${{env.environment}}"
    
