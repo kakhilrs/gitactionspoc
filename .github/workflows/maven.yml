@@ -44,31 +44,38 @@ jobs:
         name: artifacts
     - name: Deploy to Dev
       if: github.ref == 'refs/heads/develop'
-      run: echo "environment=dev" >> $GITHUB_ENV
       env:
         USERNAME: ${{ secrets.ANYPOINT_USER }}
         PASSWORD: ${{ secrets.ANYPOINT_PASS }}
         ANYPOINT_ENV: ${{ secrets.ANYPOINT_ENV_DEV }}
-      
+      run:  |
+        echo "environment=dev" >> $GITHUB_ENV
+        artifactName=$(ls *.jar | head -1)
+        echo $ENVIRONMENT
+        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName=$USERNAME -Danypoint.password=$PASSWORD -Denvironment=$ANYPOINT_ENV -Dapp.cloudhub="agithubactions-poc-${{env.environment}}"
+   
     - name: Deploy to release
       if: github.ref == 'refs/heads/release'
-      run: echo "environment=uat" >> $GITHUB_ENV
       env:
         USERNAME: ${{ secrets.ANYPOINT_USER }}
         PASSWORD: ${{ secrets.ANYPOINT_PASS }}
         ANYPOINT_ENV: ${{ secrets.ANYPOINT_ENV_UAT }}
-      
+      run:  |
+        echo "environment=uat" >> $GITHUB_ENV
+        artifactName=$(ls *.jar | head -1)
+        echo $ENVIRONMENT
+        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName=$USERNAME -Danypoint.password=$PASSWORD -Denvironment=$ANYPOINT_ENV -Dapp.cloudhub="agithubactions-poc-${{env.environment}}"
+   
     - name: Deploy to Prod
       if: github.ref == 'refs/heads/master'
-      run: echo "environment=prd" >> $GITHUB_ENV
       env:
         USERNAME: ${{ secrets.ANYPOINT_USER }}
         PASSWORD: ${{ secrets.ANYPOINT_PASS }}
         ANYPOINT_ENV: ${{ secrets.ANYPOINT_ENV_PRD }}
-      
-    - name: Assign environment variables      
       run:  |
+        echo "environment=dev" >> $GITHUB_ENV
         artifactName=$(ls *.jar | head -1)
         echo $ENVIRONMENT
-        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName="kakhilmar" -Danypoint.password="Apisero@123" -Denvironment=$ANYPOINT_ENV -Dapp.cloudhub="agithubactions-poc-${{env.environment}}"
+        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName=$USERNAME -Danypoint.password=$PASSWORD -Denvironment=$ANYPOINT_ENV -Dapp.cloudhub="agithubactions-poc-${{env.environment}}"
    
+      
