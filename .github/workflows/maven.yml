@@ -68,6 +68,7 @@ jobs:
         ANYPOINT_ENV: ${{ secrets.ANYPOINT_ENV_UAT }}
         
     - name: Deploy to Prod
+      if: github.ref == 'refs/heads/master'
       run:  |
         echo "environment=dev" >> $GITHUB_ENV
         echo "USERNAME=${USERNAME}" >> $GITHUB_ENV
@@ -80,7 +81,7 @@ jobs:
         
     - run:  |
         artifactName=$(ls *.jar | head -1)
-        echo $ENVIRONMENT
-        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName=${{ env.USERNAME }} -Danypoint.password=${{ env.PASSWORD }} -Denvironment=${{ env.ANYPOINT_ENV }} -Dapp.cloudhub="agithubactions-poc-${{env.environment}}"
+        echo ${{env.environment}}
+        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.userName=${{ env.USERNAME }} -Danypoint.password=${{ env.PASSWORD }} -Denvironment="Sandbox" -Dapp.cloudhub="agithubactions-poc-${{env.environment}}"
    
       
